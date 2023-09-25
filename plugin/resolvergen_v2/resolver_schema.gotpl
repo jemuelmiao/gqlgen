@@ -1,0 +1,42 @@
+{{ reserveImport "context"  }}
+{{ reserveImport "fmt"  }}
+{{ reserveImport "io"  }}
+{{ reserveImport "strconv"  }}
+{{ reserveImport "time"  }}
+{{ reserveImport "sync"  }}
+{{ reserveImport "errors"  }}
+{{ reserveImport "bytes"  }}
+
+{{ reserveImport "github.com/vektah/gqlparser/v2" }}
+{{ reserveImport "github.com/vektah/gqlparser/v2/ast" }}
+{{ reserveImport "github.com/99designs/gqlgen/graphql" }}
+{{ reserveImport "github.com/99designs/gqlgen/graphql/introspection" }}
+
+{{ .Imports }}
+
+{{ if .HasRoot }}
+	type {{.ResolverType}} struct {}
+{{ end }}
+
+{{ range $resolver := .Resolvers -}}
+	{{ if $resolver.Comment -}}
+		// {{ $resolver.Comment }}
+	{{- else if not $.OmitTemplateComment -}}
+		// {{ $resolver.Field.GoFieldName }} is the resolver for the {{ $resolver.Field.Name }} field.
+	{{- end }}
+	func {{$resolver.Field.GoFieldName}}{{ with $resolver.PrevDecl }}{{ $resolver.Field.ShortResolverSignature .Type }}{{ else }}{{ $resolver.Field.ShortResolverDeclaration }}{{ end }}{
+		{{ $resolver.Implementation }}
+	}
+
+{{ end }}
+
+{{ range $object := .Objects -}}
+	{{ if not $.OmitTemplateComment -}}
+		// {{ucFirst $object.Name}} returns {{ $object.ResolverInterface | ref }} implementation.
+	{{- end }}
+	func (r *{{$.ResolverType}}) {{ucFirst $object.Name}}() {{ $object.ResolverInterface | ref }} { return &{{lcFirst $object.Name}}{{ucFirst $.ResolverType}}{r} }
+{{ end }}
+
+{{ range $object := .Objects -}}
+	type {{lcFirst $object.Name}}{{ucFirst $.ResolverType}} struct { *{{$.ResolverType}} }
+{{ end }}

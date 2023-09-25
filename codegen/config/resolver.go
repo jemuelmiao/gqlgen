@@ -16,8 +16,9 @@ type ResolverConfig struct {
 	Type                string         `yaml:"type,omitempty"`
 	Layout              ResolverLayout `yaml:"layout,omitempty"`
 	DirName             string         `yaml:"dir"`
+	SchemaDirName       string         `yaml:"schema_dir,omitempty"`
 	OmitTemplateComment bool           `yaml:"omit_template_comment,omitempty"`
-	ResolverTemplate    string         `yaml:"resolver_template,omitempty"`
+	//ResolverTemplate    string         `yaml:"resolver_template,omitempty"`
 }
 
 type ResolverLayout string
