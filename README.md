@@ -26,3 +26,6 @@
 
 #### 组织结构
 <img width="306" alt="image" src="https://github.com/jemuelmiao/gqlgen/assets/28854032/ad9adcfc-f900-46b5-865d-a6ebb43a497b">
+
+### 相关阅读
+http://www.miaozhouguang.com/?p=365
